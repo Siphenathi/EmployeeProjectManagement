@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import Home from './components/home/home';
 import About from './components/about/about';
 import Contact from './components/contact/contact';
@@ -9,26 +9,22 @@ import Container from '@mui/material/Container';
 
 class App extends Component {
 
-	render() {
-		return (
-			<React.Fragment>
-				<Router>				
-					<div className="App">
-						<Navigation/>
-						<Container maxWidth="lg">
-							<Switch>
-								<Route exact path="/" component={Home}/>
-								<Route path="/cart" component={Home}/>
-								<Route path="/contact" component={Contact}/>
-								<Route path="/about" component={About}/>
-								<Route component={NoMatch}/>
-							</Switch>
-						</Container>
-					</div>
-				</Router>
-       		</React.Fragment>
-		);
-	}
+  render() {
+    return (
+      <>
+          <Navigation/>
+          <Container maxWidth="lg">
+            <Routes>             
+                <Route path="/" element={<Home/>} />
+                <Route path="cart" element={<Home/>} />
+                <Route path="contact" element={<Contact/>} />
+                <Route path="about" element={<About/>} />
+                <Route path="*" element={<NoMatch/>} />
+            </Routes>
+          </Container>          
+      </>
+    );
+  }
 }
 
 export default App;

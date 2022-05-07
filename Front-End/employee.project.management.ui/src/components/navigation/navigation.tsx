@@ -8,9 +8,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from '@mui/material/Tooltip';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -23,16 +23,16 @@ import {NavigationModel} from '../model/navigationModel';
 import './navigation.css';
 
 const pages: NavigationModel [] = [
-  {linkName:'Employee', to:'/employee'},
-  {linkName:'Project', to:'/project'},
-  {linkName:'About', to:'/about'},
-  {linkName:'Contact', to:'/contact'}
+  {routeName:'Employee', route:'/employee'},
+  {routeName:'Project', route:'/project'},
+  {routeName:'About', route:'/about'},
+  {routeName:'Contact', route:'/contact'}
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const NavigationBar = () => {
 
-	const history = useHistory();
+	const navigate = useNavigate();
     const [anchorElementNav, setAnchorElementNav] = React.useState<null | HTMLElement>(null);
     const [anchorElementUser, setAnchorElementUser] = React.useState<null | HTMLElement>(null);
     
@@ -56,7 +56,7 @@ const NavigationBar = () => {
         <AppBar position="sticky" className="app-navbar">
           <Container maxWidth="lg">
             <Toolbar disableGutters>
-				<NavLink to='/home' key='logo' >					
+				<NavLink to='/home' key='logo' style={{textDecoration:'none'}}>					
 					<Typography
 						variant="h6"
 						noWrap
@@ -85,11 +85,11 @@ const NavigationBar = () => {
 					>
 						<List>
 							{pages.map((page, index) => (
-								<ListItem button key={index} onClick={() => history.push(page.to)}>
+								<ListItem button key={index} onClick={() => navigate(page.route)}>
 									<ListItemIcon>
 										{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
 									</ListItemIcon>
-									<ListItemText primary={page.linkName} />
+									<ListItemText primary={page.routeName} />
 								</ListItem>
 							))}
 						</List>
@@ -108,14 +108,14 @@ const NavigationBar = () => {
               	<Box sx={{ flexGrow: 25, display: { xs: 'none', md: 'flex' } }}/>
 				<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, lineHeight:'64px' }}>
 					{pages.map((page) => (
-					<NavLink to={page.to} key={page.linkName} className="nav-link-style" sx={{backgroundColor:'black'}}>
+					<NavLink to={page.route} key={page.routeName} className="nav-link-style">
 						<Typography
 						variant="h6"
 						textAlign="center"
 						component="div"
 						sx={{ mx: 2, display: { xs: 'none', md: 'flex' , color: 'white'}, lineHeight:'64px', fontSize:'1rem' }}
 						>
-						{page.linkName}
+						{page.routeName}
 						</Typography>
 					</NavLink>
 					))}
@@ -126,7 +126,7 @@ const NavigationBar = () => {
 						<Grid item xs='auto' md={6}>
 							<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+								<Avatar alt="Nathi" src="~/images/computer-monitor.jpg" />
 							</IconButton>
 							</Tooltip>
 							<Menu

@@ -1,4 +1,4 @@
 export type NavigationModel = {
-    linkName: string,
-    to:string
+    routeName: string,
+    route:string
 }
