@@ -5,10 +5,10 @@ import Link from '@mui/material/Link';
  const Contact = () => (
     <>
         <Typography
-			variant="h2"
+			variant="h4"
 			noWrap={false}
 			component="div"
-			sx={{ my: 4 }}
+			sx={{ my: 3 }}
             align='center'
 		>
 			Contact		

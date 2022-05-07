@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
  const About = () => (
 
     <>
-        <Typography
+        {/* <Typography
 			variant="h2"
 			noWrap={false}
 			component="div"
@@ -13,12 +13,13 @@ import { Typography } from '@mui/material';
             align='center'
 		>
 			Welcome to About		
-		</Typography>
+		</Typography> */}
         <Typography
 			variant="h4"
 			noWrap
 			component="div"
             align='center'
+			sx={{ my: 3}}
 		>
 			Who's Nathi?		
 		</Typography>
