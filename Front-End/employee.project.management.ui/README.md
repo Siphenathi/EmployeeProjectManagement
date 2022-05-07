@@ -6,7 +6,7 @@ In the project directory, you can run:
 
 ### `npm install`
 
-To firstly install the packages, this project has been pushed without packages
+install the packages, this project has been pushed without packages
 
 ### `npm start`
 
