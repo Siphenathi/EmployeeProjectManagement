@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeProjectManagement.H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeProjectManagement.Model", "EmployeeProjectManagement.Model\EmployeeProjectManagement.Model.csproj", "{ACBCBAC4-15BF-4C40-BF4C-69EAA838B1CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeProjectManagement.Host.Tests", "EmployeeProjectManagement.Host.Tests\EmployeeProjectManagement.Host.Tests.csproj", "{C838BE35-02EB-4166-A324-5FF169E84F5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{ACBCBAC4-15BF-4C40-BF4C-69EAA838B1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACBCBAC4-15BF-4C40-BF4C-69EAA838B1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACBCBAC4-15BF-4C40-BF4C-69EAA838B1CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C838BE35-02EB-4166-A324-5FF169E84F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C838BE35-02EB-4166-A324-5FF169E84F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C838BE35-02EB-4166-A324-5FF169E84F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C838BE35-02EB-4166-A324-5FF169E84F5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
