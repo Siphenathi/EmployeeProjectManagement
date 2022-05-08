@@ -4,6 +4,7 @@ import Home from './components/home/home';
 import About from './components/about/about';
 import Contact from './components/contact/contact';
 import NoMatch from './components/noMatch/noMatch';
+import Employee from './components/employee/employee';
 import Navigation from './components/navigation/navigation';
 import Container from '@mui/material/Container';
 
@@ -14,9 +15,9 @@ class App extends Component {
       <>
           <Navigation/>
           <Container maxWidth="lg">
-            <Routes>             
+            <Routes>
                 <Route path="/" element={<Home/>} />
-                <Route path="cart" element={<Home/>} />
+                <Route path="employee" element={<Employee/>} />
                 <Route path="contact" element={<Contact/>} />
                 <Route path="about" element={<About/>} />
                 <Route path="*" element={<NoMatch/>} />
