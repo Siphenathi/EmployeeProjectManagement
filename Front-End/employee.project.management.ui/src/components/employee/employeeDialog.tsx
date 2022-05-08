@@ -50,6 +50,7 @@ const Transition = forwardRef(function Transition(
         {
             name: employeeName, 
             surname: employeeSurname, 
+            dateOfBirth: '09/02/2023',
             jobTitleId: jobTitleId, 
             jobTitle:''
         };        
@@ -102,7 +103,7 @@ const Transition = forwardRef(function Transition(
                                 onChange={(event: any) => setEmployeeSurname(event.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={6}>
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} required={true}>
                                 <InputLabel id="demo-simple-select-standard-label">Job Title</InputLabel>
                                 <Select
@@ -110,6 +111,21 @@ const Transition = forwardRef(function Transition(
                                     id="demo-simple-select-standard"
                                     value={jobTitleId}
                                     onChange={(event: any) => setJobTitleId(Number(event.target.value))}
+                                >
+                                    {props.jobTitles.map((title) => (
+                                        <MenuItem value={title.id} key={title.id}>{title.description}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>                            
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} required={true}>
+                                <InputLabel id="demo-simple-select-standard-label">Job Title</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    value={jobTitleId}
+                                    // onChange={(event: any) => setJobTitleId(Number(event.target.value))}
                                 >
                                     {props.jobTitles.map((title) => (
                                         <MenuItem value={title.id} key={title.id}>{title.description}</MenuItem>

@@ -24,26 +24,27 @@ import {JobTitleModel} from '../model/jobTitleModel';
 function createData(
     name: string,
     surname: string,
+	dateOfBirth: string,
     jobTitle: string,
 	jobTitleId: number
   ) : EmployeeModel {
-    return { name, surname, jobTitle, jobTitleId };
+    return { name, surname, dateOfBirth, jobTitle, jobTitleId };
   }
 
 const rows = [
-    createData('Thabani', 'Ntembe', 'Software Developer', 1),
-    createData('Sindisiwe', 'Kubheka', 'Software Tester', 2),
-    createData('Nosipho', 'Gumede', 'Database Administrator', 3),
-    createData('Sipho', 'Gumede', 'Database Administrator', 4),
-    createData('Zuko', 'Gumede', 'Database Administrator', 5),
-    createData('Nathi', 'Gumede', 'Database Administrator', 6),
-    createData('Olwethu', 'Gumede', 'Database Administrator', 7),
-    createData('Funeka', 'Gumede', 'Database Administrator', 8),
-    createData('Hlalanathi', 'Gumede', 'Database Administrator', 9),
-    createData('Ncebakazi', 'Gumede', 'Database Administrator', 10),
-    createData('Andisiwe', 'Gumede', 'Database Administrator', 11),
-    createData('Sicelo', 'Gumede', 'Database Administrator', 12),
-    createData('Mandla', 'Gumede', 'Database Administrator', 13)
+    createData('Thabani', 'Ntembe', '04/02/1990', 'Software Developer', 1),
+    createData('Sindisiwe', 'Kubheka', '04/02/1992', 'Software Tester', 2),
+    createData('Nosipho', 'Gumede', '04/02/1993', 'Database Administrator', 3),
+    createData('Sipho', 'Gumede', '04/02/1994', 'Database Administrator', 4),
+    createData('Zuko', 'Gumede', '04/02/1995', 'Database Administrator', 5),
+    createData('Nathi', 'Gumede', '04/02/1996', 'Database Administrator', 6),
+    createData('Olwethu', 'Gumede', '04/02/1997', 'Database Administrator', 7),
+    createData('Funeka', 'Gumede', '04/02/1998', 'Database Administrator', 8),
+    createData('Hlalanathi', 'Gumede', '04/02/1999', 'Database Administrator', 9),
+    createData('Ncebakazi', 'Gumede', '04/02/2000', 'Database Administrator', 10),
+    createData('Andisiwe', 'Gumede', '04/02/2001', 'Database Administrator', 11),
+    createData('Sicelo', 'Gumede', '04/02/2002', 'Database Administrator', 12),
+    createData('Mandla', 'Gumede', '04/02/2003', 'Database Administrator', 13)
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -88,6 +89,10 @@ const headCells: readonly EmployeeHeadCell[] = [
   {
     id: 'surname',
     label: 'Surname',
+  },
+  {
+    id: 'dateOfBirth',
+    label: 'Date of Birth',
   },
   {
     id: 'jobTitle',
@@ -178,6 +183,7 @@ const searchEmployeeByAnyField = (name: string): EmployeeModel[] => {
 					return (
 						item.name.toLowerCase().includes(name.toLowerCase()) || 
 						item.surname.toLocaleLowerCase().includes(name.toLocaleLowerCase()) ||
+						item.dateOfBirth.toLocaleLowerCase().includes(name.toLocaleLowerCase()) ||
 						item.jobTitle.toLocaleLowerCase().includes(name.toLocaleLowerCase())
 					)
 			}
@@ -266,6 +272,7 @@ const emptyRows =
 									>
 										<TableCell component="th" scope="row" align="right">{row.name}</TableCell>
 										<TableCell align="right">{row.surname}</TableCell>
+										<TableCell align="right">{row.dateOfBirth}</TableCell>
 										<TableCell align="right">{row.jobTitle}</TableCell>
 									</TableRow>
 								);
