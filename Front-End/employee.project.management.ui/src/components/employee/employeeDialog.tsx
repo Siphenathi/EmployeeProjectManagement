@@ -26,14 +26,15 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="right" ref={ref} {...props} />;
   });
 
- const EmployeeFormDialog = (props: {openDialog:boolean, setOpenEmployeeDialogFunction:any, jobTitles:JobTitleModel[] }) => {
+ const EmployeeFormDialog = (props: {openDialog:boolean, setOpenEmployeeDialogCallBack:any, 
+                            jobTitles:JobTitleModel[], saveNewEmployeeCallBack: any }) => {
 
     const [jobTitleId, setJobTitleId] = useState(0);
     const [employeeName, setEmployeeName] = useState('');
     const [employeeSurname, setEmployeeSurname] = useState('');    
 
     const handleClose = () => {
-        props.setOpenEmployeeDialogFunction(false);
+        props.setOpenEmployeeDialogCallBack(false);
         clearDialogState();
     };
 
@@ -51,10 +52,9 @@ const Transition = forwardRef(function Transition(
             surname: employeeSurname, 
             jobTitleId: jobTitleId, 
             jobTitle:''
-        };
-        console.log('obj : ', employeeToBeRegistered);
+        };        
         clearDialogState();
-        
+        props.saveNewEmployeeCallBack(employeeToBeRegistered)   
     }
 
     const clearDialogState = (): void => {

@@ -196,8 +196,9 @@ const getAllJobTitles = () => {
 	setJobTitles(obj);
 }
 
-const saveNewEmployee = () => {
-
+const saveNewEmployee = (employee: EmployeeModel): void => {
+	console.log('obj : ', employee);
+	setOrder('desc');
 }
 
 useEffect(() => {
@@ -244,12 +245,12 @@ const emptyRows =
 					aria-label="simple table"
 				>
 					<EnhancedTableHead
-					numSelected={8}
-					order={order}
-					orderBy={orderBy}
-					onSelectAllClick={() => {}}
-					onRequestSort={handleRequestSort}
-					rowCount={employeesData.length}
+						numSelected={8}
+						order={order}
+						orderBy={orderBy}
+						onSelectAllClick={() => {}}
+						onRequestSort={handleRequestSort}
+						rowCount={employeesData.length}
 					/>
 					<TableBody>
 						{stableSort(employeesData, getComparator(order, orderBy))
@@ -290,8 +291,13 @@ const emptyRows =
 				onPageChange={handleChangePage}
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
-      </Paper>
-	  <EmployeeFormDialog openDialog={openEmployeeDialog} setOpenEmployeeDialogFunction={setOpenEmployeeDialog} jobTitles={jobTitles} />
+      	</Paper>
+	  	<EmployeeFormDialog 
+	  		openDialog={openEmployeeDialog} 
+	  		setOpenEmployeeDialogCallBack={setOpenEmployeeDialog} 
+			jobTitles={jobTitles}
+			saveNewEmployeeCallBack={saveNewEmployee}
+		/>
     </Box>
   );
 }
