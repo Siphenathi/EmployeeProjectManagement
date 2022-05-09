@@ -28,7 +28,7 @@ namespace EmployeeProjectManagement.Host.Controllers
 			var allEmployees = await _employeeRepository.GetAllEmployeesAsync();
 			return !allEmployees.Any()
 				? StatusCode(204, "No Employees found yet")
-				: new ActionResult<IEnumerable<EmployeeList>>(MapEmployeeObject(allEmployees));
+				: new ActionResult<IEnumerable<EmployeeList>>(await MapEmployeeObject(allEmployees));
 		}
 
 		[HttpPost]
@@ -53,10 +53,10 @@ namespace EmployeeProjectManagement.Host.Controllers
 			}
 		}
 
-		private IEnumerable<EmployeeList> MapEmployeeObject(IEnumerable<EmployeeEntity> employees)
+		private async Task<IEnumerable<EmployeeList>> MapEmployeeObject(IEnumerable<EmployeeEntity> employees)
 		{
 			var employeeList = new List<EmployeeList>();
-			async void CreateEmployeeList(EmployeeEntity entity)
+			foreach (var entity in employees)
 			{
 				var jobTitle = await _jobTitleRepository.GetJobTitleAsync(entity.JobTitleId);
 				employeeList.Add(new EmployeeList
@@ -69,8 +69,6 @@ namespace EmployeeProjectManagement.Host.Controllers
 					DateOfBirth = entity.DateOfBirth
 				});
 			}
-
-			employees.ToList().ForEach(CreateEmployeeList);
 			return employeeList;
 		}
 	}

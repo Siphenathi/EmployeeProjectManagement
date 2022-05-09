@@ -31,7 +31,8 @@ const Transition = forwardRef(function Transition(
 
     const [jobTitleId, setJobTitleId] = useState(0);
     const [employeeName, setEmployeeName] = useState('');
-    const [employeeSurname, setEmployeeSurname] = useState('');    
+    const [employeeSurname, setEmployeeSurname] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
 
     const handleClose = () => {
         props.setOpenEmployeeDialogCallBack(false);
@@ -39,7 +40,8 @@ const Transition = forwardRef(function Transition(
     };
 
     const disableSubmitButton = (): boolean => {
-        if(jobTitleId === 0 || employeeName === '' || employeeSurname === '')
+        if(jobTitleId === 0 || employeeName === '' 
+        || employeeSurname === '' || dateOfBirth === '')
             return true;
         return false;
     }
@@ -50,7 +52,7 @@ const Transition = forwardRef(function Transition(
         {
             name: employeeName, 
             surname: employeeSurname, 
-            dateOfBirth: '09/02/2023',
+            dateOfBirth: dateOfBirth,
             jobTitleId: jobTitleId, 
             jobTitle:''
         };        
@@ -113,25 +115,22 @@ const Transition = forwardRef(function Transition(
                                     onChange={(event: any) => setJobTitleId(Number(event.target.value))}
                                 >
                                     {props.jobTitles.map((title) => (
-                                        <MenuItem value={title.id} key={title.id}>{title.description}</MenuItem>
+                                        <MenuItem value={title.id} key={title.id}>{title.jobTitle}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>                            
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} required={true}>
-                                <InputLabel id="demo-simple-select-standard-label">Job Title</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-standard-label"
-                                    id="demo-simple-select-standard"
-                                    value={jobTitleId}
-                                    // onChange={(event: any) => setJobTitleId(Number(event.target.value))}
-                                >
-                                    {props.jobTitles.map((title) => (
-                                        <MenuItem value={title.id} key={title.id}>{title.description}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>                            
+                            <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="dateofbirth"
+                                    label="Date of Birth"
+                                    variant="standard"
+                                    required={true}
+                                    type="date"
+                                    onChange={(event: any) => setDateOfBirth(event.target.value)}
+                                />                          
                         </Grid>
                     </Grid>            
                 </DialogContent>

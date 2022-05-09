@@ -20,32 +20,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import EmployeeFormDialog from './employeeDialog';
 import {JobTitleModel} from '../model/jobTitleModel';
-
-function createData(
-    name: string,
-    surname: string,
-	dateOfBirth: string,
-    jobTitle: string,
-	jobTitleId: number
-  ) : EmployeeModel {
-    return { name, surname, dateOfBirth, jobTitle, jobTitleId };
-  }
-
-const rows = [
-    createData('Thabani', 'Ntembe', '04/02/1990', 'Software Developer', 1),
-    createData('Sindisiwe', 'Kubheka', '04/02/1992', 'Software Tester', 2),
-    createData('Nosipho', 'Gumede', '04/02/1993', 'Database Administrator', 3),
-    createData('Sipho', 'Gumede', '04/02/1994', 'Database Administrator', 4),
-    createData('Zuko', 'Gumede', '04/02/1995', 'Database Administrator', 5),
-    createData('Nathi', 'Gumede', '04/02/1996', 'Database Administrator', 6),
-    createData('Olwethu', 'Gumede', '04/02/1997', 'Database Administrator', 7),
-    createData('Funeka', 'Gumede', '04/02/1998', 'Database Administrator', 8),
-    createData('Hlalanathi', 'Gumede', '04/02/1999', 'Database Administrator', 9),
-    createData('Ncebakazi', 'Gumede', '04/02/2000', 'Database Administrator', 10),
-    createData('Andisiwe', 'Gumede', '04/02/2001', 'Database Administrator', 11),
-    createData('Sicelo', 'Gumede', '04/02/2002', 'Database Administrator', 12),
-    createData('Mandla', 'Gumede', '04/02/2003', 'Database Administrator', 13)
-];
+import CustomAlert from '../shared/customAlert';
+import axios from 'axios';
+import { AlertModel } from '../model/alertModal';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -106,9 +83,12 @@ const Employee = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchValue, setSearchValue] = useState('');
-  const [employeesData, setEmployeesData] = useState(rows);
+  const [employeesData, setEmployeesData] = useState([] as EmployeeModel[]);
+  const [employeesInitialData, setEmployeesInitialData] = useState([] as EmployeeModel[]);
   const [openEmployeeDialog, setOpenEmployeeDialog] = useState(false);
   const [jobTitles, setJobTitles] = useState([] as JobTitleModel[])
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertDetails, setAlertDetails] = useState({} as AlertModel);
 
   const EnhancedTableHead = (props: EmployeeEnhancedTableProps) => {
 	const { order, orderBy, onRequestSort } =
@@ -174,16 +154,15 @@ const Employee = () => {
 }
 
 const searchEmployeeByAnyField = (name: string): EmployeeModel[] => {
-	var employeeList = rows as unknown as EmployeeModel[];
+	var employeeList = employeesInitialData;
 	if(name === "" || name === undefined)
 		return employeeList;
 
-	var employeeList = employeeList.filter(
+	employeeList = employeeList.filter(
 			item => {
 					return (
 						item.name.toLowerCase().includes(name.toLowerCase()) || 
 						item.surname.toLocaleLowerCase().includes(name.toLocaleLowerCase()) ||
-						item.dateOfBirth.toLocaleLowerCase().includes(name.toLocaleLowerCase()) ||
 						item.jobTitle.toLocaleLowerCase().includes(name.toLocaleLowerCase())
 					)
 			}
@@ -191,28 +170,75 @@ const searchEmployeeByAnyField = (name: string): EmployeeModel[] => {
 	return employeeList;
 }
 
-const getAllJobTitles = () => {
-	var obj :JobTitleModel[] = 
-	[
-		{id: 1, description: 'Software Engineer'},
-		{id: 2, description: 'Software Tester'},
-		{id: 3, description: 'Database Administrator'},
-		{id: 4, description: 'Business Analyst'}
-	]
-	setJobTitles(obj);
+const fetchAllJobTitles = () => {
+	const apiUrl = 'https://localhost:44381/api/v1/jobtitle';
+    axios.get(apiUrl)
+        .then(response => {
+			var results = response.data as JobTitleModel[];
+			setJobTitles(results);
+        })
+		.catch(error => {
+            console.log(error);
+			setAlertDetails({
+				title: 'Cannot get JobTitles',
+				description: error.message,
+				feedbackType: "error"
+			});
+			setOpenAlert(true);
+        })
+}
+
+const fetchAllEmployees = () => {
+	const apiUrl = 'https://localhost:44381/api/v1/employee';
+    axios.get(apiUrl)
+        .then(response => {
+			var results = response.data as EmployeeModel[];
+			setEmployeesData(results);
+			setEmployeesInitialData(results);
+        })
+		.catch(error => {
+            console.log(error);
+			setAlertDetails({
+				title: 'Cannot get Employees',
+				description: error.message,
+				feedbackType: "error"
+			});
+			setOpenAlert(true);
+        })
 }
 
 const saveNewEmployee = (employee: EmployeeModel): void => {
-	console.log('obj : ', employee);
-	setOrder('desc');
+	const apiUrl = 'https://localhost:44381/api/v1/employee/add';
+    axios.post(apiUrl, employee)
+        .then(response => {
+			if(response.status === 200){
+				fetchAllEmployees();
+				setAlertDetails({
+					title: 'Success',
+					description: "Employee has been saved successfully",
+					feedbackType: "success"
+				});
+				setOpenAlert(true);
+			}	
+        })
+		.catch(error => {
+            console.log(error);
+			setAlertDetails({
+				title: 'Cannot save Employee',
+				description: error.message,
+				feedbackType: "error"
+			});
+			setOpenAlert(true);
+        })
 }
 
 useEffect(() => {
-	getAllJobTitles();
+	fetchAllJobTitles();
+	fetchAllEmployees();
   }, [""]);
 
 const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - employeesData.length) : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -299,6 +325,7 @@ const emptyRows =
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
       	</Paper>
+		<CustomAlert openAlert={openAlert} setOpenAlertCallBack={setOpenAlert} alertDetails={alertDetails}/>
 	  	<EmployeeFormDialog 
 	  		openDialog={openEmployeeDialog} 
 	  		setOpenEmployeeDialogCallBack={setOpenEmployeeDialog} 
