@@ -30,5 +30,12 @@ namespace EmployeeProjectManagement.Service
 				throw new ArgumentNullException(nameof(employee)); //Error middleware required
 			return await _employeeRepository.InsertAsync(employee, PrimaryKeyName);
 		}
+
+		public async Task<EmployeeEntity> GetEmployeeAsync(int employeeId)
+		{
+			if (employeeId == 0)
+				return new EmployeeEntity();
+			return await _employeeRepository.GetAsync(employeeId, PrimaryKeyName);
+		}
 	}
 }

@@ -8,5 +8,6 @@ namespace EmployeeProjectManagement.Service.Interface
 	{
 		Task<IEnumerable<EmployeeEntity>> GetAllEmployeesAsync();
 		Task<int> AddEmployeeAsync(EmployeeEntity employee);
+		Task<EmployeeEntity> GetEmployeeAsync(int employeeId);
 	}
 }

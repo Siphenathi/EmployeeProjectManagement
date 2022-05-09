@@ -86,6 +86,36 @@ namespace EmployeeProjectManagement.Service.Tests
 			actual.Should().Be(1);
 		}
 
+		[Fact]
+		public async Task GetEmployee_WhenCalledWithInvalidEmployeeId_ShouldReturnNoJobEmployee()
+		{
+			//Arrange
+			var sut = CreateEmployeeRepository(_connectionString);
+
+			//Act
+			var actual = await sut.GetEmployeeAsync(0);
+
+			//Assert
+			actual.Name.Should().BeNullOrEmpty();
+			actual.Surname.Should().BeNullOrEmpty();
+			actual.Id.Should().Be(0);
+		}
+
+		[Fact]
+		public async Task GetEmployee_WhenCalledWithValidEmployeeId_ShouldReturnEmployee()
+		{
+			//Arrange
+			var sut = CreateEmployeeRepository(_connectionString);
+
+			//Act
+			var actual = await sut.GetEmployeeAsync(4);
+
+			//Assert
+			actual.Name.Should().NotBeNullOrEmpty();
+			actual.Surname.Should().NotBeNullOrEmpty();
+			actual.Id.Should().BeGreaterThanOrEqualTo(1);
+		}
+
 		private static IEmployeeRepository CreateEmployeeRepository(string connectionString)
 		{
 			IEmployeeRepository employeeRepository = new EmployeeRepository(connectionString);

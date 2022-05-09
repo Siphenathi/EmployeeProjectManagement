@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeProjectManagement.Host.BusinessLogic;
+using EmployeeProjectManagement.Host.BusinessLogic.Interface;
 using EmployeeProjectManagement.Service;
 using EmployeeProjectManagement.Service.Interface;
 
@@ -38,6 +40,9 @@ namespace EmployeeProjectManagement.Host
 			var connectionString = Configuration.GetConnectionString("EPMConnection");
 			services.AddScoped<IEmployeeRepository>(serviceProvider => new EmployeeRepository(connectionString));
 			services.AddScoped<IJobTitleRepository>(serviceProvider => new JobTitleRepository(connectionString));
+			services.AddScoped<IProjectRepository>(serviceProvider => new ProjectRepository(connectionString));
+			services.AddScoped<IProjectEmployeeRepository>(serviceProvider => new ProjectEmployeeRepository(connectionString));
+			services.AddScoped<IProjectBusinessLogic, ProjectBusinessLogic>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
