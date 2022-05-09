@@ -13,7 +13,7 @@
 - Lastly, run Select from all tables.sql to see the data in tables
 8. Run the all tests first and then the project
 9. open this folder (Front-End\employee.project.management.ui) in visual studio code, this is the front end project
-11. firstly, install node packages (npm install)
-12. then npm start to run the front-end app
-13. Lastly, open this link in your browser type http://localhost:3000/ if you have another app running at this port number look at your log terminal for a different port number
-14. NB: You can also use postman to test the API's only
+10. firstly, install node packages (npm install)
+11. then npm start to run the front-end app
+12. Lastly, open this link in your browser type http://localhost:3000/ if you have another app running at this port number look at your log terminal for a different port number
+13. NB: You can also use postman to test the API's only
