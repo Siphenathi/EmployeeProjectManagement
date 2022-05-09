@@ -25,71 +25,45 @@ namespace EmployeeProjectManagement.Host.BusinessLogic
 			_jobTitleRepository = jobTitleRepository;
 		}
 
-		public async Task<IEnumerable<ProjectList>> GetAllProjectsAsync()
+		public async Task<IEnumerable<ProjectList>> GetAllProjectsAsync(bool applyNewRule)
 		{
 			var listOfProjects = new List<ProjectList>();
 			var projects = await _projectRepository.GetAllProjectsAsync();
 			foreach (var project in projects)
 			{
-				var projectList = CreateProjectList(project);
 				var projectEmployees = await _projectEmployeeRepository.GetAllProjectEmployeesAsync(project.Id);
-				var stringBuilder = new StringBuilder();
-
-				foreach (var projectEmployee in projectEmployees)
-				{
-					var employee = await _employeeRepository.GetEmployeeAsync(projectEmployee.EmployeeId);
-					stringBuilder.Append($"{employee.Name} {employee.Surname}");
-					stringBuilder.Append(", ");
-				}
-
-				if (stringBuilder.Length > 4)
-					stringBuilder.Remove(stringBuilder.Length - 2, 2);
-				projectList.Employees = stringBuilder.ToString();
-				listOfProjects.Add(projectList);
+				var projectMetaData = await GetProjectMetaData(projectEmployees, applyNewRule);
+				listOfProjects.Add(
+					CreateProjectList(project, 
+						projectMetaData.StringBuilder.ToString(),
+						applyNewRule ? projectMetaData.AdditionalCost : 0
+						)
+					);
 			}
 			return listOfProjects;
 		}
 
-		public async Task<IEnumerable<ProjectList>> GetAllProjectsWithNewRuleAsync()
+		private async Task<Response> GetProjectMetaData(IEnumerable<ProjectEmployeeEntity> projectEmployeeEntities, bool applyNewRule = false)
 		{
-			var listOfProjects = new List<ProjectList>();
-			var projects = await _projectRepository.GetAllProjectsAsync();
-			foreach (var project in projects)
+			var stringBuilder = new StringBuilder();
+			var cost = 0.0M;
+			foreach (var projectEmployee in projectEmployeeEntities)
 			{
-				var projectList = CreateProjectList(project);
-				var projectEmployees = await _projectEmployeeRepository.GetAllProjectEmployeesAsync(project.Id);
-				var stringBuilder = new StringBuilder();
-
-				foreach (var projectEmployee in projectEmployees)
-				{
-					var employee = await _employeeRepository.GetEmployeeAsync(projectEmployee.EmployeeId);
-					var jobTitle = await _jobTitleRepository.GetJobTitleAsync(employee.JobTitleId);
-
-					projectList.Cost += GetAdditionalCost(jobTitle.JobTitle);
-
-					stringBuilder.Append($"{employee.Name} {employee.Surname}");
-					stringBuilder.Append(", ");
-				}
-
-				if (stringBuilder.Length > 4)
-					stringBuilder.Remove(stringBuilder.Length - 2, 2);
-				projectList.Employees = stringBuilder.ToString();
-				listOfProjects.Add(projectList);
+				var employee = await _employeeRepository.GetEmployeeAsync(projectEmployee.EmployeeId);
+				stringBuilder.Append($"{employee.Name} {employee.Surname}, ");
+				if(applyNewRule)
+					cost += await GetEmployeeJobTitleAdditionalCost(employee.JobTitleId);
 			}
-			return listOfProjects;
+			if (stringBuilder.Length > 4)
+				stringBuilder.Remove(stringBuilder.Length - 2, 2);
+
+			return new Response { StringBuilder = stringBuilder , AdditionalCost = cost};
 		}
 
-		private static ProjectList CreateProjectList(ProjectEntity project)
+		private async Task<decimal> GetEmployeeJobTitleAdditionalCost(int jobTitleId)
 		{
-			var projectList = new ProjectList
-			{
-				Id = project.Id,
-				Name = project.Name,
-				StartDate = project.StartDate,
-				EndDate = project.EndDate,
-				Cost = project.Cost
-			};
-			return projectList;
+			var jobTitle = await _jobTitleRepository.GetJobTitleAsync(jobTitleId);
+			return GetAdditionalCost(jobTitle.JobTitle);
 		}
 
 		private static decimal GetAdditionalCost(string jobTitle)
@@ -101,6 +75,20 @@ namespace EmployeeProjectManagement.Host.BusinessLogic
 			if (jobTitle.Equals("Tester", StringComparison.CurrentCultureIgnoreCase))
 				return 1000;
 			return jobTitle.Equals("Business Analyst", StringComparison.CurrentCultureIgnoreCase) ? 4500 : 0;
+		}
+
+		private static ProjectList CreateProjectList(ProjectEntity project, string employees = null, decimal additionalCost = 0)
+		{
+			var projectList = new ProjectList
+			{
+				Id = project.Id,
+				Name = project.Name,
+				StartDate = project.StartDate,
+				EndDate = project.EndDate,
+				Cost = project.Cost + additionalCost,
+				Employees = employees
+			};
+			return projectList;
 		}
 	}
 }

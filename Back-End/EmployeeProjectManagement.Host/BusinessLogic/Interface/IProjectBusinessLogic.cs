@@ -6,6 +6,6 @@ namespace EmployeeProjectManagement.Host.BusinessLogic.Interface
 {
 	public interface IProjectBusinessLogic
 	{
-		Task<IEnumerable<ProjectList>> GetAllProjectsAsync();
+		Task<IEnumerable<ProjectList>> GetAllProjectsAsync(bool applyNewRule = false);
 	}
 }

@@ -19,9 +19,9 @@ namespace EmployeeProjectManagement.Host.Controllers
 
 		[HttpGet]
 		[Route("api/v1/[controller]")]
-		public async Task<ActionResult<IEnumerable<ProjectList>>> GetAsync()
+		public async Task<ActionResult<IEnumerable<ProjectList>>> GetAsync(bool applyNewRule = false)
 		{
-			var projectLists = await _projectBusinessLogic.GetAllProjectsAsync();
+			var projectLists = await _projectBusinessLogic.GetAllProjectsAsync(applyNewRule);
 			return !projectLists.Any()
 				? StatusCode(204, "No Projects found yet")
 				: new ActionResult<IEnumerable<ProjectList>>(projectLists);

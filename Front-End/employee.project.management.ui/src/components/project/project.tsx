@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import CustomAlert from '../shared/customAlert';
 import axios from 'axios';
 import { AlertModel } from '../model/alertModal';
+import Switch from '@mui/material/Switch';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -88,6 +89,7 @@ const Project = () => {
   const [projectsInitialData, setProjectsInitialData] = useState([] as ProjectModel[]);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertDetails, setAlertDetails] = useState({} as AlertModel);
+  const [switchChecked, setSwitchChecked] = useState(false);
 
   const EnhancedTableHead = (props: ProjectEnhancedTableProps) => {
 	const { order, orderBy, onRequestSort } =
@@ -168,47 +170,51 @@ const searchProjectByAnyField = (name: string): ProjectModel[] => {
 	return projectList;
 }
 
-// const fetchAllProjects = () => {
-// 	const apiUrl = 'https://localhost:44381/api/v1/project';
-//     axios.get(apiUrl)
-//         .then(response => {
-// 			var results = response.data as ProjectModel[];
-// 			setProjectsData(results);
-// 			setProjectsInitialData(results);
-//         })
-// 		.catch(error => {
-//             console.log(error);
-// 			setAlertDetails({
-// 				title: 'Cannot get Projects',
-// 				description: error.message,
-// 				feedbackType: "error"
-// 			});
-// 			setOpenAlert(true);
-//         })
-// }
+const handleSwitchCheck = ():void => {
+	setSwitchChecked(!switchChecked)
+	switchChecked ?	fetchAllProjects() : fetchAllProjectsApplyingNewRule();
+}
+
+const fetchAllProjects = () => {
+	const apiUrl = 'https://localhost:44381/api/v1/project';
+    axios.get(apiUrl)
+        .then(response => {
+			var results = response.data as ProjectModel[];
+			setProjectsData(results);
+			setProjectsInitialData(results);
+        })
+		.catch(error => {
+            console.log(error);
+			setAlertDetails({
+				title: 'Cannot get Projects',
+				description: error.message,
+				feedbackType: "error"
+			});
+			setOpenAlert(true);
+        })
+}
+
+const fetchAllProjectsApplyingNewRule = () => {
+	const apiUrl = 'https://localhost:44381/api/v1/project?applyNewRule=true';
+    axios.get(apiUrl)
+        .then(response => {
+			var results = response.data as ProjectModel[];
+			setProjectsData(results);
+			setProjectsInitialData(results);
+        })
+		.catch(error => {
+            console.log(error);
+			setAlertDetails({
+				title: 'Cannot get Projects',
+				description: error.message,
+				feedbackType: "error"
+			});
+			setOpenAlert(true);
+        })
+} 
 
 useEffect(() => {
-	console.log('project Data : ', projectsData)
-	const fetchData = async () => {
-		const apiUrl = 'https://localhost:44381/api/v1/project';
-		axios.get(apiUrl)
-			.then(response => {
-				var results = response.data as ProjectModel[];
-				setProjectsData(results);
-				setProjectsInitialData(results);
-			})
-			.catch(error => {
-				console.log(error);
-				setAlertDetails({
-					title: 'Cannot get Projects',
-					description: error.message,
-					feedbackType: "error"
-				});
-				setOpenAlert(true);
-			})
-	}
-
-	fetchData()
+	fetchAllProjects()
   }, []);
 
 const emptyRows =
@@ -236,6 +242,9 @@ const emptyRows =
 					onChange={findProject}
 					value={searchValue}
 				/>
+			</Grid>
+			<Grid item xs={6} container direction="row" justifyContent="center" alignItems="center">
+				Apply New Rule ? No <Switch onChange={handleSwitchCheck} checked={switchChecked}/> Yes
 			</Grid>
 		</Grid>
       	<Paper sx={{ width: '100%', mb: 2 }}>
